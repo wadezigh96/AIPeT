@@ -36,9 +36,9 @@ export default function Home() {
           <p>
             Payments go to{" "}
             <code className="bg-orange-100 px-1 rounded text-xs">
-              0xB095...ec29
+              0xfcea...5e03
             </code>{" "}
-            via x402 on Base
+            (creator) via x402 on Base
           </p>
           <p>
             Get test USDC on Base Sepolia from{" "}
