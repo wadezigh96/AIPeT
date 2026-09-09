@@ -1,7 +1,16 @@
+"use client";
+
+import { useState } from "react";
 import Chat from "@/components/Chat";
+import Donate from "@/components/Donate";
+import Contribute from "@/components/Contribute";
 import WalletButton from "@/components/WalletButton";
 
+type Tab = "talk" | "donate" | "contribute";
+
 export default function Home() {
+  const [tab, setTab] = useState<Tab>("talk");
+
   return (
     <main className="min-h-screen py-8 px-4">
       <div className="max-w-4xl mx-auto">
@@ -11,33 +20,59 @@ export default function Home() {
             <span className="text-4xl">🐾</span>
             <div>
               <h1 className="text-2xl font-bold text-orange-800">AIPeT</h1>
-              <p className="text-sm text-orange-600/80">Decentralized AI Pet • x402 + Privy</p>
+              <p className="text-sm text-orange-600/80">
+                Socialism & Decentralization for pet and human
+              </p>
             </div>
           </div>
           <WalletButton />
         </header>
 
-        {/* Hero text */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
-            Your AI companion, paid by the message
+        {/* Hero */}
+        <div className="text-center mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+            One place for pets & humans
           </h2>
-          <p className="text-gray-600 max-w-xl mx-auto">
-            Chat with AIPeT using micropayments on Base. No subscriptions.
-            Powered by <strong>x402</strong> protocol & <strong>Privy</strong> agentic wallets.
+          <p className="text-gray-600 max-w-xl mx-auto text-sm sm:text-base">
+            <strong>Donate</strong> · <strong>Contribute</strong> · <strong>Talk about Pet</strong>
+            <br />
+            Powered by x402 micropayments & Privy on Base
           </p>
         </div>
 
-        {/* Chat */}
-        <Chat />
+        {/* Tabs */}
+        <div className="flex justify-center gap-2 mb-6">
+          {(
+            [
+              { id: "talk" as Tab, label: "Talk about Pet", icon: "💬" },
+              { id: "donate" as Tab, label: "Donate", icon: "💖" },
+              { id: "contribute" as Tab, label: "Contribute", icon: "🚀" },
+            ] as const
+          ).map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                tab === t.id
+                  ? "bg-orange-500 text-white shadow-md"
+                  : "bg-white/80 text-gray-700 border border-orange-200 hover:border-orange-400"
+              }`}
+            >
+              {t.icon} {t.label}
+            </button>
+          ))}
+        </div>
 
-        {/* Footer info */}
+        {/* Content */}
+        {tab === "talk" && <Chat />}
+        {tab === "donate" && <Donate />}
+        {tab === "contribute" && <Contribute />}
+
+        {/* Footer */}
         <footer className="mt-10 text-center text-sm text-gray-500 space-y-1">
           <p>
-            Payments go to{" "}
-            <code className="bg-orange-100 px-1 rounded text-xs">
-              0xfcea...5e03
-            </code>{" "}
+            All payments go to{" "}
+            <code className="bg-orange-100 px-1 rounded text-xs">0xfcea...5e03</code>{" "}
             (creator) via x402 on Base
           </p>
           <p>
