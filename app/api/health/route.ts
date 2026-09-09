@@ -1,12 +1,25 @@
 import { NextResponse } from "next/server";
+import { payToEvm, payToSolana, NETWORKS } from "@/lib/x402";
 
 export async function GET() {
   return NextResponse.json({
     status: "ok",
     service: "AIPeT",
-    version: "0.1.0",
+    version: "0.2.0",
+    agent: "Rubah — Robot Pet Agent",
     payment: "x402",
-    chain: process.env.X402_NETWORK || "eip155:84532",
-    recipient: process.env.PAY_TO_ADDRESS || "0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03",
+    networks: {
+      base: NETWORKS.base,
+      baseSepolia: NETWORKS.baseSepolia,
+      bnb: NETWORKS.bnb,
+      bnbTestnet: NETWORKS.bnbTestnet,
+      solana: NETWORKS.solana,
+      solanaDevnet: NETWORKS.solanaDevnet,
+    },
+    recipient: {
+      evm: payToEvm,
+      solana: payToSolana || null,
+    },
+    features: ["chat", "donate", "contribute", "farcaster-miniapp"],
   });
 }
