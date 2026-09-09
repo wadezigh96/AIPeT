@@ -9,50 +9,58 @@
 
 | Network | CAIP-2 | Status |
 |---------|--------|--------|
-| **Base** | `eip155:8453` | ✅ Mainnet |
-| **Base Sepolia** | `eip155:84532` | ✅ Testnet |
-| **BNB Chain** (Binance) | `eip155:56` | ✅ Mainnet |
-| **BNB Testnet** | `eip155:97` | ✅ Testnet |
-| **Solana** | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` | ✅ Ready (set `PAY_TO_SOLANA`) |
-| **Solana Devnet** | `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1` | ✅ Ready |
+| **Base** | `eip155:8453` | ✅ |
+| **Base Sepolia** | `eip155:84532` | ✅ |
+| **BNB Chain** (Binance) | `eip155:56` | ✅ |
+| **BNB Testnet** | `eip155:97` | ✅ |
+| **Solana** | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` | ✅ |
+| **Solana Devnet** | `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1` | ✅ |
 
-> Robinhood: currently no native x402 chain; users can bridge / on-ramp via supported wallets.
+## Recipients
+
+| Chain | Address |
+|-------|---------|
+| **EVM** (Base + BNB) | `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03` |
+| **Solana** | `GN3GD3JGqE1B1H7SrA8ncu3YQgVgT8qRVYvKzE8pscvn` |
 
 ## Features
 
 | Feature | Description | Default Price |
 |---------|-------------|---------------|
-| 🦊 **Chat dengan Rubah** | Robot pet agent untuk segala keperluan | $0.01 |
+| 🦊 **Chat dengan Rubah** | Robot pet agent | $0.01 |
 | 💖 **Donate** | Support community & creator | $0.50 |
-| 🚀 **Contribute** | Fund development / community | $0.25 |
-| 👥 **Farcaster Mini App** | Manifest + webhook ready | — |
+| 🚀 **Contribute** | Fund development | $0.25 |
+| 👥 **Farcaster Mini App** | Manifest + webhook | — |
 
-- **Privy** embedded + agentic wallets
-- **x402** multi-chain micropayments
-- **Farcaster** Mini App support
+## Deploy to Vercel
 
-## Quick Start
+```bash
+# 1. Install Vercel CLI
+npm i -g vercel
+
+# 2. Login & link
+vercel login
+vercel link
+
+# 3. Set environment variables in Vercel Dashboard
+#    NEXT_PUBLIC_PRIVY_APP_ID, PRIVY_APP_SECRET,
+#    PAY_TO_ADDRESS, PAY_TO_SOLANA, OPENAI_API_KEY, etc.
+
+# 4. Deploy
+vercel --prod
+```
+
+Atau hubungkan repo `wadezigh96/AIPeT` langsung di [vercel.com/new](https://vercel.com/new).
+
+## Quick Start (local)
 
 ```bash
 git clone https://github.com/wadezigh96/AIPeT.git
 cd AIPeT
 npm install
 cp .env.example .env.local
-# Isi PRIVY_*, PAY_TO_*, OPENAI_* dll
 npm run dev
 ```
-
-## Recipient
-
-- **EVM** (Base + BNB): `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03`
-- **Solana**: set `PAY_TO_SOLANA` di `.env`
-
-## Farcaster Mini App
-
-Manifest tersedia di `/.well-known/farcaster.json`  
-Webhook: `/api/farcaster/webhook`
-
-Setelah deploy, verifikasi domain di Farcaster Developers dashboard.
 
 ## License
 
