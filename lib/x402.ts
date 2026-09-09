@@ -1,7 +1,7 @@
 import { HTTPFacilitatorClient, x402ResourceServer } from "@x402/core/server";
 import { ExactEvmScheme } from "@x402/evm/exact/server";
 
-const payTo = (process.env.PAY_TO_ADDRESS || "0xB095274743941e953c746F9C228DA9c18Bb6ec29") as `0x${string}`;
+const payTo = (process.env.PAY_TO_ADDRESS || "0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03") as `0x${string}`;
 const network = process.env.X402_NETWORK || "eip155:84532"; // Base Sepolia
 const facilitatorUrl = process.env.X402_FACILITATOR_URL || "https://x402.org/facilitator";
 const chatPrice = process.env.CHAT_PRICE_USD || "0.01";
