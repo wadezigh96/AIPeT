@@ -17,11 +17,11 @@ export default function Home() {
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <span className="text-4xl">🐾</span>
+            <span className="text-4xl">🦊</span>
             <div>
               <h1 className="text-2xl font-bold text-orange-800">AIPeT</h1>
               <p className="text-sm text-orange-600/80">
-                Socialism & Decentralization for pet and human
+                Robot Pet Agent · siap bantu segala keperluan
               </p>
             </div>
           </div>
@@ -31,20 +31,22 @@ export default function Home() {
         {/* Hero */}
         <div className="text-center mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
-            One place for pets & humans
+            Teman robot pet kamu
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto text-sm sm:text-base">
-            <strong>Donate</strong> · <strong>Contribute</strong> · <strong>Talk about Pet</strong>
+            Dari foto anak kucing lembut → menjadi <strong>agent virtual rubah robot</strong> yang
+            membantu sehari-hari.
             <br />
-            Powered by x402 micropayments & Privy on Base
+            <strong>Chat</strong> · <strong>Donate</strong> · <strong>Contribute</strong> — semua
+            via x402 + Privy di Base
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-center gap-2 mb-6">
+        <div className="flex justify-center gap-2 mb-6 flex-wrap">
           {(
             [
-              { id: "talk" as Tab, label: "Talk about Pet", icon: "💬" },
+              { id: "talk" as Tab, label: "Chat dengan Rubah", icon: "🦊" },
               { id: "donate" as Tab, label: "Donate", icon: "💖" },
               { id: "contribute" as Tab, label: "Contribute", icon: "🚀" },
             ] as const
