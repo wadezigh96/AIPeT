@@ -51,7 +51,7 @@ Open [http://localhost:3000](http://localhost:3000)
 4. Request is retried with payment proof
 5. Server verifies & settles via facilitator → returns AI response
 
-**Recipient address**: `0xB095274743941e953c746F9C228DA9c18Bb6ec29`
+**Recipient / Creator address**: `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03`
 
 ## Project Structure
 
