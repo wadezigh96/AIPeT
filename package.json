@@ -1,6 +1,6 @@
 {
   "name": "aipet",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,13 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@farcaster/frame-sdk": "^0.0.35",
     "@privy-io/react-auth": "^2.0.0",
     "@privy-io/node": "^0.1.0",
     "@x402/core": "^0.1.0",
     "@x402/evm": "^0.1.0",
+    "@x402/svm": "^0.1.0",
     "@x402/fetch": "^0.1.0",
     "@x402/next": "^0.1.0",
-    "@x402/express": "^0.1.0",
     "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
