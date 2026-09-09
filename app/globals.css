@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #1f2937;
+  --background: #fff7ed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Cute pet vibe */
+.pet-bubble {
+  @apply rounded-2xl px-4 py-2 max-w-[80%] shadow-sm;
+}
+
+.pet-bubble.user {
+  @apply bg-orange-500 text-white ml-auto;
+}
+
+.pet-bubble.assistant {
+  @apply bg-white border border-orange-100 text-gray-800;
+}
