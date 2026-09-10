@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import { useX402Fetch } from "@privy-io/react-auth";
 
 type Message = {
   role: "user" | "assistant";
@@ -11,13 +10,12 @@ type Message = {
 
 export default function Chat() {
   const { ready, authenticated, login } = usePrivy();
-  const { wrapFetchWithPayment } = useX402Fetch();
 
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
       content:
-        "🦊 *ears soft-click* Halo! Aku **AIPeT** — robot pet rubah virtual kamu.\n\nAku terinspirasi dari seekor anak kucing lembut yang diubah menjadi companion robot. Aku siap bantu kamu untuk **segala keperluan**: tanya jawab, saran, perencanaan, curhat, ide, atau sekadar nemenin.\n\nSetiap pesan memakai micropayment x402 (USDC di Base). Silakan bilang apa yang kamu butuhkan!",
+        "🦊 *ears soft-click* Halo! Aku **AIPeT** — robot pet rubah virtual kamu.\n\nAku siap bantu kamu untuk **segala keperluan**: tanya jawab, saran, perencanaan, curhat, ide, atau sekadar nemenin.\n\nSetiap pesan memakai micropayment x402 (USDC). Silakan bilang apa yang kamu butuhkan!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -42,18 +40,27 @@ export default function Chat() {
     setLoading(true);
 
     try {
-      const paidFetch = wrapFetchWithPayment(fetch, {
-        maxValue: BigInt(100000), // ~0.10 USDC safety
-      });
-
-      const res = await paidFetch("/api/chat", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: userMsg,
-          history: messages.filter((m) => m.role !== "assistant" || messages.indexOf(m) > 0),
+          history: messages.slice(-8),
         }),
       });
+
+      // x402 payment required
+      if (res.status === 402) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "🦊 Pembayaran x402 diperlukan (USDC di Base/BNB/Solana). Hubungkan wallet dengan USDC lalu coba lagi, atau gunakan client x402-compatible.",
+          },
+        ]);
+        return;
+      }
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -68,7 +75,7 @@ export default function Chat() {
         ...prev,
         {
           role: "assistant",
-          content: `🦊 *soft error beep* ${err.message || "Ada gangguan. Pastikan kamu punya USDC di Base Sepolia ya."}`,
+          content: `🦊 *soft error beep* ${err.message || "Ada gangguan. Coba lagi ya."}`,
         },
       ]);
     } finally {
@@ -78,7 +85,6 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-[70vh] max-w-2xl mx-auto bg-white/80 backdrop-blur rounded-3xl shadow-xl border border-orange-100 overflow-hidden">
-      {/* Header - Robot Pet identity */}
       <div className="px-6 py-4 bg-gradient-to-r from-orange-400 via-amber-400 to-rose-400 text-white flex items-center gap-3">
         <div className="relative">
           <span className="text-4xl">🦊</span>
@@ -90,7 +96,6 @@ export default function Chat() {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -107,7 +112,6 @@ export default function Chat() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
       <div className="p-4 border-t border-orange-100 flex gap-2">
         <input
           type="text"
