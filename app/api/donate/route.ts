@@ -1,11 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-import { withX402 } from "@x402/next";
-import { resourceServer, donateRouteConfig, payTo } from "@/lib/x402";
 
-async function handler(req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
     const message = body.message || "Thank you for supporting AIPeT!";
+    const payTo = process.env.PAY_TO_ADDRESS || "0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03";
+
+    if (process.env.ENABLE_X402_PAYWALL === "true") {
+      const payment = req.headers.get("x-payment") || req.headers.get("PAYMENT-SIGNATURE");
+      if (!payment) {
+        return NextResponse.json(
+          {
+            x402Version: 1,
+            error: "Payment required",
+            accepts: [
+              {
+                scheme: "exact",
+                network: process.env.X402_NETWORK || "eip155:84532",
+                maxAmountRequired: "500000",
+                payTo,
+                description: "Donate to AIPeT",
+              },
+            ],
+          },
+          { status: 402 }
+        );
+      }
+    }
 
     return NextResponse.json({
       success: true,
@@ -20,5 +41,3 @@ async function handler(req: NextRequest) {
     return NextResponse.json({ error: err.message || "Internal error" }, { status: 500 });
   }
 }
-
-export const POST = withX402(handler, payTo, donateRouteConfig, resourceServer);
