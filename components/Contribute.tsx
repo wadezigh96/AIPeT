@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import { useX402Fetch } from "@privy-io/react-auth";
 
 const CONTRIBUTION_TYPES = [
   { id: "development", label: "Development & Code" },
@@ -13,7 +12,6 @@ const CONTRIBUTION_TYPES = [
 
 export default function Contribute() {
   const { ready, authenticated, login } = usePrivy();
-  const { wrapFetchWithPayment } = useX402Fetch();
   const [type, setType] = useState("general");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [result, setResult] = useState<string | null>(null);
@@ -28,15 +26,17 @@ export default function Contribute() {
     setResult(null);
 
     try {
-      const paidFetch = wrapFetchWithPayment(fetch, {
-        maxValue: BigInt(2_500_000), // max ~$2.50 USDC safety
-      });
-
-      const res = await paidFetch("/api/contribute", {
+      const res = await fetch("/api/contribute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ contribution: type }),
       });
+
+      if (res.status === 402) {
+        setResult("Pembayaran x402 diperlukan ($0.25 USDC).");
+        setStatus("error");
+        return;
+      }
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -55,7 +55,7 @@ export default function Contribute() {
   return (
     <div className="bg-white/80 backdrop-blur rounded-3xl shadow-xl border border-orange-100 p-6 max-w-2xl mx-auto">
       <div className="flex items-center gap-3 mb-4">
-        <span className="text-3xl">🧑‍💻</span>
+        <span className="text-3xl">🚀</span>
         <div>
           <h2 className="font-bold text-lg text-orange-800">Contribute</h2>
           <p className="text-sm text-gray-500">Help build AIPeT together</p>
@@ -63,8 +63,7 @@ export default function Contribute() {
       </div>
 
       <p className="text-gray-600 mb-4 text-sm">
-        Contribute to development, community, or content. Paid via <strong>x402</strong>.
-        Default amount: <strong>$0.25 USDC</strong>.
+        Kontribusi via <strong>x402</strong>. Default: <strong>$0.25 USDC</strong>.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
