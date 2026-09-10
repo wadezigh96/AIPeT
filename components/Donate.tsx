@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
-import { useX402Fetch } from "@privy-io/react-auth";
 
 export default function Donate() {
   const { ready, authenticated, login } = usePrivy();
-  const { wrapFetchWithPayment } = useX402Fetch();
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [result, setResult] = useState<string | null>(null);
@@ -21,15 +19,17 @@ export default function Donate() {
     setResult(null);
 
     try {
-      const paidFetch = wrapFetchWithPayment(fetch, {
-        maxValue: BigInt(5_000_000), // max ~$5 USDC safety
-      });
-
-      const res = await paidFetch("/api/donate", {
+      const res = await fetch("/api/donate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: message || "Supporting AIPeT!" }),
       });
+
+      if (res.status === 402) {
+        setResult("Pembayaran x402 diperlukan ($0.50 USDC). Pastikan wallet punya USDC.");
+        setStatus("error");
+        return;
+      }
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -57,14 +57,13 @@ export default function Donate() {
       </div>
 
       <p className="text-gray-600 mb-4 text-sm">
-        Every donation goes directly to the creator via <strong>x402</strong> on Base.
-        Default amount: <strong>$0.50 USDC</strong>.
+        Setiap donasi masuk ke creator via <strong>x402</strong>. Default: <strong>$0.50 USDC</strong>.
       </p>
 
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Leave a short message (optional)..."
+        placeholder="Pesan singkat (opsional)..."
         className="w-full rounded-xl border border-orange-200 px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
         rows={3}
       />
