@@ -1,6 +1,6 @@
 {
   "name": "aipet",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,19 +10,17 @@
   },
   "dependencies": {
     "@farcaster/frame-sdk": "^0.0.35",
-    "@privy-io/react-auth": "^2.0.0",
-    "@privy-io/node": "^0.1.0",
-    "@x402/core": "^0.1.0",
-    "@x402/evm": "^0.1.0",
-    "@x402/svm": "^0.1.0",
-    "@x402/fetch": "^0.1.0",
-    "@x402/next": "^0.1.0",
-    "next": "^15.0.0",
+    "@privy-io/react-auth": "^2.21.0",
+    "@x402/core": "^2.25.0",
+    "@x402/evm": "^2.25.0",
+    "@x402/next": "^2.25.0",
+    "@x402/fetch": "^2.25.0",
+    "next": "^15.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "viem": "^2.21.0",
-    "openai": "^4.0.0",
-    "zod": "^3.23.0"
+    "openai": "^4.77.0",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
     "@types/node": "^20",
