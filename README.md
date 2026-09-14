@@ -1,6 +1,6 @@
 # AIPeT 🦊
 
-**Robot Pet Agent** — companion virtual rubah robot yang membantu user untuk segala keperluan.
+**Robot Pet Agent — a virtual robot-fox companion that assists users with all kinds of needs.
 
 **Donate · Contribute · Chat with Fox Bot**
 
@@ -29,14 +29,14 @@ OPENAI_API_KEY=xxx          # opsional
 NEXT_PUBLIC_APP_URL=https://your-app.vercel.app
 ```
 
-4. Klik **Deploy**
+4. **Deploy**
 
 ### Via CLI
 
 ```bash
 npm i -g vercel
 vercel login
-vercel link   # pilih / buat project aipet
+vercel link   
 vercel env add NEXT_PUBLIC_PRIVY_APP_ID
 # ... tambah env lain
 vercel --prod
