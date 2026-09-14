@@ -2,7 +2,7 @@
 
 **Robot Pet Agent** — companion virtual rubah robot yang membantu user untuk segala keperluan.
 
-**Donate · Contribute · Chat with Rubah**
+**Donate · Contribute · Chat with Fox Bot**
 
 ## Networks (x402)
 
@@ -19,11 +19,6 @@
 | **EVM** (Base + BNB) | `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03` |
 | **Solana** | `GN3GD3JGqE1B1H7SrA8ncu3YQgVgT8qRVYvKzE8pscvn` |
 
-## Deploy ke Vercel (1 klik)
-
-1. Buka **https://vercel.com/new**
-2. Import repo **`wadezigh96/AIPeT`**
-3. Tambah Environment Variables:
 
 ```
 NEXT_PUBLIC_PRIVY_APP_ID=xxx
