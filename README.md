@@ -1,21 +1,31 @@
 # AIPeT 🦊
 
-**Robot Pet Agent** — a virtual fox-robot companion for everyday help, **animal charity**, and **daily activity** sharing.
+**Robot Pet Agent** — chat, **animal charity**, **daily activity** posts, and community tips.
 
-Monetized with **x402** · Auth via **Privy** · Chains: **Solana**, **Base**, **BNB**, **Robinhood Chain** · **Farcaster** ready.
+**x402** micropayments · **Privy** auth · **Solana · Base · BNB · Robinhood Chain** · **Farcaster** scaffold.
 
-See [ROADMAP.md](./ROADMAP.md) and [CONTRIBUTING.md](./CONTRIBUTING.md).
+This repository is an open **scaffold** for collaborators. It is suitable to share for team formation; production settlement and a global feed still need engineering work.
+
+## Documentation (start here)
+
+| Doc | Purpose |
+|-----|---------|
+| **[docs/STRUCTURE.md](./docs/STRUCTURE.md)** | Full tree, every utility, APIs, gap matrix |
+| **[ROADMAP.md](./ROADMAP.md)** | Phased plan and priorities |
+| **[CONTRIBUTING.md](./CONTRIBUTING.md)** | Setup, roles, PR rules |
+| [docs/AGENT.md](./docs/AGENT.md) | Agent-oriented API notes |
+| [docs/MULTI_CHAIN.md](./docs/MULTI_CHAIN.md) | Chain IDs and Farcaster |
 
 ## Features
 
-| Feature | Description | Default price |
+| Utility | Description | Default price |
 |---------|-------------|---------------|
-| **Chat** | Robot pet agent | $0.01 USDC |
-| **Activity** | Post daily pet life / care moments | Free (MVP) |
-| **Charity** | Animal shelters, wildlife, strays, emergency vet | $1.00 USDC |
-| **Donate** | Support creator & community | $0.50 USDC |
+| **Chat** | Fox robot-pet agent | $0.01 USDC |
+| **Activity** | Daily pet-life posts (MVP: local device) | Free |
+| **Charity** | Shelters, wildlife, strays, emergency vet | $1.00 USDC |
+| **Donate** | Support creator / community | $0.50 USDC |
 | **Contribute** | Fund development | $0.25 USDC |
-| **Farcaster** | Mini App scaffold | — |
+| **Farcaster** | Mini App manifest + webhook | — |
 
 ## Networks
 
@@ -28,11 +38,11 @@ See [ROADMAP.md](./ROADMAP.md) and [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Recipients
 
-| Purpose | Address |
-|---------|---------|
-| EVM (Base, BNB, Robinhood) | `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03` |
+| Purpose | Address / env |
+|---------|----------------|
+| EVM | `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03` |
 | Solana | `GN3GD3JGqE1B1H7SrA8ncu3YQgVgT8qRVYvKzE8pscvn` |
-| Animal charity (optional) | `CHARITY_PAY_TO_ADDRESS` or same EVM |
+| Charity | `CHARITY_PAY_TO_ADDRESS` (optional override) |
 
 ## Quick start
 
@@ -42,6 +52,12 @@ cd AIPeT && npm install
 cp .env.example .env.local
 npm run dev
 ```
+
+## Colosseum / collaborators
+
+Suggested tags: **`ai`**, **`consumer`**, **`payments`**.
+
+We are looking for frontend, backend, Solana, and EVM engineers. See [ROADMAP.md](./ROADMAP.md).
 
 ## License
 
