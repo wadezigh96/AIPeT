@@ -33,7 +33,7 @@ export default function Contribute() {
       });
 
       if (res.status === 402) {
-        setResult("Pembayaran x402 diperlukan ($0.25 USDC).");
+        setResult("x402 payment required ($0.25 USDC).");
         setStatus("error");
         return;
       }
@@ -63,7 +63,7 @@ export default function Contribute() {
       </div>
 
       <p className="text-gray-600 mb-4 text-sm">
-        Kontribusi via <strong>x402</strong>. Default: <strong>$0.25 USDC</strong>.
+        Contribute via <strong>x402</strong>. Default: <strong>$0.25 USDC</strong>.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
@@ -90,8 +90,8 @@ export default function Contribute() {
         {status === "loading"
           ? "Processing..."
           : authenticated
-          ? "Contribute $0.25 USDC"
-          : "Connect & Contribute"}
+            ? "Contribute $0.25 USDC"
+            : "Connect & Contribute"}
       </button>
 
       {result && (
