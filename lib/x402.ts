@@ -3,7 +3,7 @@ import { ExactEvmScheme } from "@x402/evm/exact/server";
 // Solana support
 // import { ExactSvmScheme } from "@x402/svm/exact/server";
 
-/** Creator / recipient (EVM) */
+/** Creator / recipient (EVM — Base, BNB, Robinhood Chain) */
 export const payToEvm = (process.env.PAY_TO_ADDRESS || "0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03") as `0x${string}`;
 
 /** Solana recipient */
@@ -15,12 +15,16 @@ const chatPrice = process.env.CHAT_PRICE_USD || "0.01";
 const donatePrice = process.env.DONATE_PRICE_USD || "0.50";
 const contributePrice = process.env.CONTRIBUTE_PRICE_USD || "0.25";
 
-/** Supported networks */
+/** Supported networks (CAIP-2) */
 export const NETWORKS = {
   baseSepolia: "eip155:84532",
   base: "eip155:8453",
   bnb: "eip155:56",
   bnbTestnet: "eip155:97",
+  /** Robinhood Chain mainnet (Arbitrum Orbit L2, chain id 4663) */
+  robinhood: "eip155:4663",
+  /** Robinhood Chain testnet (chain id 46630) */
+  robinhoodTestnet: "eip155:46630",
   solana: "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
   solanaDevnet: "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
 } as const;
@@ -33,7 +37,9 @@ export const resourceServer = new x402ResourceServer(facilitatorClient)
   .register(NETWORKS.baseSepolia, new ExactEvmScheme())
   .register(NETWORKS.base, new ExactEvmScheme())
   .register(NETWORKS.bnb, new ExactEvmScheme())
-  .register(NETWORKS.bnbTestnet, new ExactEvmScheme());
+  .register(NETWORKS.bnbTestnet, new ExactEvmScheme())
+  .register(NETWORKS.robinhood, new ExactEvmScheme())
+  .register(NETWORKS.robinhoodTestnet, new ExactEvmScheme());
 // .register(NETWORKS.solanaDevnet, new ExactSvmScheme())
 // .register(NETWORKS.solana, new ExactSvmScheme())
 
@@ -63,6 +69,18 @@ function makeAccepts(price: string) {
       network: NETWORKS.bnbTestnet,
       payTo: payToEvm,
     },
+    {
+      scheme: "exact" as const,
+      price: `$${price}`,
+      network: NETWORKS.robinhood,
+      payTo: payToEvm,
+    },
+    {
+      scheme: "exact" as const,
+      price: `$${price}`,
+      network: NETWORKS.robinhoodTestnet,
+      payTo: payToEvm,
+    },
   ];
 
   if (payToSolana) {
@@ -87,7 +105,7 @@ function makeAccepts(price: string) {
 
 export const chatRouteConfig = {
   accepts: makeAccepts(chatPrice),
-  description: "Chat with AIPeT robot pet agent (Rubah) — help with anything",
+  description: "Chat with AIPeT robot pet agent (Fox) — help with anything",
   mimeType: "application/json",
 };
 
