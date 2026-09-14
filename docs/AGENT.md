@@ -1,61 +1,57 @@
-# AIPeT Agent Integration
+# AIPeT Agent Guide
 
-## Overview
+AIPeT is designed for both humans and autonomous agents.
 
-AIPeT is designed for both human users and autonomous AI agents.
+## Identity
 
-Agents can:
-1. Hold their own Privy agentic wallet
-2. Pay for chat / services using x402 automatically
-3. Operate under spending policies (max per tx, allowlists, etc.)
+- **Name:** AIPeT / Fox
+- **Type:** Virtual robot pet agent
+- **Personality:** Soft, helpful, slightly playful
+- **Capability:** Everyday help — Q&A, advice, planning, pet care, companionship
 
-## Using Privy Agentic Wallets
+## Paid endpoints (x402)
 
-### 1. Create an agent wallet (server-side)
+| Route | Method | Default price | Description |
+|-------|--------|---------------|-------------|
+| `/api/chat` | POST | $0.01 | Chat with the robot pet |
+| `/api/donate` | POST | $0.50 | Donate to the creator |
+| `/api/contribute` | POST | $0.25 | Support development / community |
 
-```ts
-import { PrivyClient } from "@privy-io/node";
+### Chat request body
 
-const privy = new PrivyClient({
-  appId: process.env.PRIVY_APP_ID!,
-  appSecret: process.env.PRIVY_APP_SECRET!,
-});
-
-// Create a wallet for the agent
-const wallet = await privy.walletApi.create({
-  chainType: "ethereum",
-});
+```json
+{
+  "message": "How do I care for a kitten?",
+  "history": []
+}
 ```
 
-### 2. Fund the wallet with USDC (Base Sepolia)
+### Response
 
-Use Circle faucet or transfer test USDC to the agent address.
-
-### 3. Make paid requests with x402
-
-```ts
-import { createX402Client } from "@privy-io/node"; // or @x402/fetch + signer
-
-const client = createX402Client({
-  // Privy wallet signer
-  maxValue: "0.05", // safety limit in USD
-});
-
-const res = await client.fetch("https://your-aipet.app/api/chat", {
-  method: "POST",
-  body: JSON.stringify({ message: "Hello AIPeT from agent!" }),
-});
+```json
+{
+  "success": true,
+  "reply": "...",
+  "model": "gpt-4o-mini",
+  "pet": "AIPeT"
+}
 ```
 
-## Recommended Policies
+## Payment flow
 
-- Max spend per transaction: $0.05 – $0.10
-- Daily spend limit
-- Only allow payments to the official AIPeT recipient: `0xB095274743941e953c746F9C228DA9c18Bb6ec29`
-- Restrict to Base / Base Sepolia
+1. Agent/client calls a paid route
+2. If `ENABLE_X402_PAYWALL=true` and no payment header → `402 Payment Required`
+3. Client signs USDC authorization (x402)
+4. Retry with payment proof header
+5. Server returns the response
 
-## MCP / Tool Calling
+## Recipients
 
-You can expose the paid chat endpoint as an MCP tool so other agents can call it and pay automatically via x402.
+- **EVM:** `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03`
+- **Solana:** `GN3GD3JGqE1B1H7SrA8ncu3YQgVgT8qRVYvKzE8pscvn`
 
-See the official x402 MCP examples and Privy agent docs for full patterns.
+## Health check
+
+```
+GET /api/health
+```
