@@ -375,21 +375,150 @@ POST /api/contribute { "contribution": "development|community|content|general" }
 
 ---
 
-## 7. Suggested ownership for collaborators
+## 7. Gap analysis
 
-| Role | Own these paths | First deliverable |
-|------|-----------------|-------------------|
-| **Frontend** | `components/*`, `app/page.tsx`, styles | Mobile tab UX + empty/error states |
-| **Backend** | `app/api/*`, paywall, receipts | E2E 402 + rate limit |
-| **Solana** | SVM client, `PAY_TO_SOLANA` path | Devnet tip succeeds |
-| **EVM / Robinhood** | Chain 4663 wallet + facilitator | Testnet charity tip |
-| **AI** | `lib/ai.ts`, tools | One tool + safer prompts |
-| **Data** | New `lib/db` + feed migration | Global activity feed |
-| **DevOps** | Vercel, env, health checks | Public production URL |
+This section consolidates **what is missing**, **why it matters**, **severity/impact**, **effort**, **dependencies**, and **recommended order**. Use it for sprint planning and Colosseum / collaborator scoping.
+
+### 7.1 Severity legend
+
+| Severity | Meaning |
+|----------|---------|
+| **P0 — Blocker** | Blocks credible production demo or honest “live payments” claims |
+| **P1 — High** | Core product promise incomplete (social, charity trust, multi-chain) |
+| **P2 — Medium** | UX, depth, or distribution; improves conversion and retention |
+| **P3 — Low** | Nice-to-have differentiation after P0–P2 |
+
+| Effort | Rough guide |
+|--------|-------------|
+| **S** | Hours to ~2 days |
+| **M** | ~3–7 days |
+| **L** | Multi-week or specialist work |
 
 ---
 
-## 8. Local development
+### 7.2 Critical path gaps (P0)
+
+| ID | Gap | Area | Why it matters | Effort | Depends on | Mitigation / next action |
+|----|-----|------|----------------|--------|------------|--------------------------|
+| G01 | No stable **production URL** | DevOps | Judges/partners cannot try the app; Farcaster cannot verify domain | S–M | Vercel project, env secrets | Deploy main → set `NEXT_PUBLIC_APP_URL` → monitor `/api/health` |
+| G02 | **Paywall not proven E2E** | Payments | 402 bodies exist, but no verified USDC settlement on a public testnet | M | Facilitator, test USDC, wallet with funds | Turn on `ENABLE_X402_PAYWALL` on Base Sepolia; one recorded successful pay |
+| G03 | **Client does not auto-pay** on 402 | Frontend + payments | Users see payment required but cannot complete flow in-app | M | G02, Privy embedded wallet / signer | Implement wrap-fetch or x402 client; retry request with payment header |
+| G04 | **Privy env may be empty** in deploy | Auth | Login disabled; half of the product unreachable | S | Privy dashboard app + allowed domains | Document required env in deploy checklist; fail soft already in `Providers` |
+
+Without G01–G03, the project remains a **UI scaffold**, not a monetized agent demo.
+
+---
+
+### 7.3 Product integrity gaps (P1)
+
+| ID | Gap | Area | Why it matters | Effort | Depends on | Mitigation / next action |
+|----|-----|------|----------------|--------|------------|--------------------------|
+| G10 | Activity feed is **localStorage-only** | Social | Posts are not shared across users; “community” is an illusion | M | DB/KV choice | Add `lib/db` or Vercel KV; `Feed` reads server list |
+| G11 | No **global moderation** | Social | Shared feed will attract spam/abuse | M | G10 | Report flag, rate limit, hide queue |
+| G12 | **Solana pay path** is config-only | Solana | Colosseum / Solana narrative needs real SVM settlement | L | Signer, USDC mint, `@x402/svm` (or equiv.) | Devnet tip to `PAY_TO_SOLANA`; document faucet steps |
+| G13 | **Robinhood** path unproven | EVM L2 | Chain IDs wired; facilitator/asset (USDC vs USDG) unclear | M–L | G02 patterns, chain 4663 RPC | Testnet tip; confirm asset decimals + facilitator support |
+| G14 | Charity has **no ledger / partners** | Charity | Trust risk: users pay “for animals” without transparency | M | G02, optional `CHARITY_PAY_TO_ADDRESS` | Receipt log by `cause`; public totals page; partner list |
+| G15 | No **payment receipts** store | Backend | Cannot debug, audit, or show explorer links | M | G02 | Persist `{ route, chain, amount, tx, user, ts }` |
+| G16 | No **rate limits** | Backend | Paid and free routes are abuse-prone once public | S–M | Middleware or edge config | Per-IP and per-wallet limits on chat/feed/pay routes |
+
+---
+
+### 7.4 Experience & depth gaps (P2)
+
+| ID | Gap | Area | Why it matters | Effort | Depends on | Mitigation / next action |
+|----|-----|------|----------------|--------|------------|--------------------------|
+| G20 | Chat has **no tools** | AI | Agent cannot act beyond text | M–L | OpenAI tools API | Start with one tool (e.g. pet-care FAQ search) |
+| G21 | **No session memory** | AI | Every visit is stateless beyond client history slice | M | User id from Privy | Store last N turns server-side per DID |
+| G22 | **No streaming** replies | AI / UX | Feels slower and less “alive” | S–M | Route handler streaming | SSE or readable stream from LLM |
+| G23 | Fixed **donation amounts** only | Payments UX | Limits willingness to pay | S | UI + API body | Amount presets + custom |
+| G24 | **Solana wallet** not in Privy config | Auth | Blocks G12 even if backend ready | M | Privy Solana or adapter | Enable Solana connector; test address display |
+| G25 | Farcaster **not associated** | Distribution | Mini App cannot be installed | M | G01, image assets | Domain verify + `public/` icons |
+| G26 | Weak **empty/error** states | Frontend | Mobile and failed pay flows feel broken | S | — | Copy + retry CTAs per tab |
+| G27 | No **OPENAI_API_KEY** in prod | AI | Demo uses mock replies only | S | Billing key | Optional; document mock vs live clearly in UI |
+
+---
+
+### 7.5 Differentiation gaps (P3)
+
+| ID | Gap | Area | Why it matters | Effort | Depends on | Notes |
+|----|-----|------|----------------|--------|------------|-------|
+| G30 | Tip-a-post / social graph | Social | Growth loops | L | G10, G02 | After global feed is stable |
+| G31 | Image uploads on activity | Social | Richer pet moments | M | Storage bucket | Privacy + moderation cost |
+| G32 | Agentic spend limits | Payments + AI | Safe autonomous pay | L | G03, session keys | Align with Privy policies |
+| G33 | Subscription tier | Business | Predictable revenue | L | Billing design | After micropayments work |
+| G34 | Multi-persona skins | Product | Brand expansion | M | Assets + prompts | After core loops work |
+| G35 | Admin metrics dashboard | Ops | Operator visibility | M | G15 | Internal only |
+| G36 | Compliance review pack | Legal | Charity + payments claims | M | Counsel | Jurisdiction-specific |
+
+---
+
+### 7.6 Cross-cutting risk register
+
+| Risk | Impact | Likelihood | Response |
+|------|--------|------------|----------|
+| Claiming “multi-chain live” while only config exists | Reputation / judging penalty | High if messaging is loose | Marketing language: **scaffold + configured networks**; demo only proven chains |
+| Charity payments to creator wallet without disclosure | Trust / legal | Medium | Prefer `CHARITY_PAY_TO_ADDRESS`; UI states funds go to charity wallet / partners |
+| localStorage feed mistaken for network effect | Product confusion | High | UI already notes MVP storage; upgrade to G10 before growth push |
+| Facilitator downtime or unsupported network | Payment failures | Medium | Fallback chain (Base Sepolia); health check includes paywall flag |
+| LLM cost without paywall | Unexpected spend | Medium | Keep paywall off only in dev; cap `max_tokens`; monitor key usage |
+| Secrets in client bundle | Security | Low if server-only secrets stay server-side | Never prefix secrets with `NEXT_PUBLIC_` except Privy app id |
+
+---
+
+### 7.7 Gap → roadmap phase mapping
+
+| Phase (see ROADMAP.md) | Primary gap IDs |
+|------------------------|-----------------|
+| Phase 1 — Stabilize & ship | G01, G02, G03, G04, G26, G27 |
+| Phase 2 — Real multi-chain settlement | G12, G13, G15, G16, G24 |
+| Phase 3 — Social activity becomes real | G10, G11, G30, G31 |
+| Phase 4 — Charity credibility | G14, G36 |
+| Phase 5 — Agent depth | G20, G21, G22, G32 |
+| Phase 6 — Distribution | G25 |
+| Phase 7 — Product & business | G23, G33, G34, G35 |
+
+---
+
+### 7.8 Suggested 2-week collaborator split
+
+| Track | Owner | Gap focus | Done when |
+|-------|--------|-----------|-----------|
+| A — Launch | DevOps + FE | G01, G04, G26 | Public URL; all tabs clickable with auth |
+| B — Money path | Backend + FE | G02, G03, G15 | One testnet payment recorded end-to-end |
+| C — Solana | Solana eng | G12, G24 | Devnet tip to `PAY_TO_SOLANA` |
+| D — Feed | Data + FE | G10, G11 | Two users see the same post |
+
+Parallelize A+B first; start C/D once A is unblocked.
+
+---
+
+### 7.9 Explicit non-gaps (out of scope for now)
+
+These are **not** treated as defects of the current scaffold:
+
+- Building a custom blockchain or L2
+- Full Twitter-style social network (DMs, follow graph) before G10
+- Mainnet revenue guarantees
+- Native mobile apps (responsive web first)
+- Replacing Privy with a custom auth stack
+
+---
+
+## 8. Suggested ownership for collaborators
+
+| Role | Own these paths | First deliverable |
+|------|-----------------|-------------------|
+| **Frontend** | `components/*`, `app/page.tsx`, styles | Mobile tab UX + empty/error states (G26); pay retry UX (G03) |
+| **Backend** | `app/api/*`, paywall, receipts | E2E 402 + rate limit (G02, G15, G16) |
+| **Solana** | SVM client, `PAY_TO_SOLANA` path | Devnet tip succeeds (G12) |
+| **EVM / Robinhood** | Chain 4663 wallet + facilitator | Testnet charity tip (G13) |
+| **AI** | `lib/ai.ts`, tools | One tool + safer prompts (G20) |
+| **Data** | New `lib/db` + feed migration | Global activity feed (G10) |
+| **DevOps** | Vercel, env, health checks | Public production URL (G01) |
+
+---
+
+## 9. Local development
 
 ```bash
 git clone https://github.com/wadezigh96/AIPeT.git
@@ -405,13 +534,13 @@ Check `GET http://localhost:3000/api/health`.
 
 ---
 
-## 9. Related docs
+## 10. Related docs
 
-- [ROADMAP.md](../ROADMAP.md) — phases and priorities
+- [ROADMAP.md](../ROADMAP.md) — phases and priorities (aligned with §7.7)
 - [CONTRIBUTING.md](../CONTRIBUTING.md) — PR workflow
 - [AGENT.md](./AGENT.md) — agent-facing notes
 - [MULTI_CHAIN.md](./MULTI_CHAIN.md) — chain parameters
 
 ---
 
-*Last aligned with repo feature set: Chat, Activity, Charity, Donate, Contribute, multi-chain (Base, BNB, Robinhood, Solana), Privy, Farcaster scaffold.*
+*Last aligned with repo feature set: Chat, Activity, Charity, Donate, Contribute, multi-chain (Base, BNB, Robinhood, Solana), Privy, Farcaster scaffold. Gap analysis IDs G01–G36.*
