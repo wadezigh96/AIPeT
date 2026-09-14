@@ -2,7 +2,7 @@
 
 **Robot Pet Agent** — a virtual fox-robot companion that helps users with everyday needs.
 
-Monetized with **x402** micropayments · Auth via **Privy** · Chains: **Solana**, Base, BNB · **Farcaster** Mini App ready.
+Monetized with **x402** micropayments · Auth via **Privy** · Chains: **Solana**, **Base**, **BNB**, **Robinhood Chain** · **Farcaster** Mini App ready.
 
 Looking for frontend, backend, and Solana collaborators — see [ROADMAP.md](./ROADMAP.md) and [CONTRIBUTING.md](./CONTRIBUTING.md).
 
@@ -15,11 +15,20 @@ Looking for frontend, backend, and Solana collaborators — see [ROADMAP.md](./R
 | Contribute | Fund development / community / content | $0.25 USDC |
 | Farcaster | Mini App manifest + webhook | — |
 
+## Networks
+
+| Network | ID |
+|---------|-----|
+| Base / Base Sepolia | 8453 / 84532 |
+| BNB Chain / Testnet | 56 / 97 |
+| **Robinhood Chain** / Testnet | **4663** / **46630** |
+| Solana / Devnet | mainnet / devnet |
+
 ## Recipients
 
 | Chain | Address |
 |-------|---------|
-| EVM (Base + BNB) | `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03` |
+| EVM (Base, BNB, Robinhood) | `0xfceafec082f9e8b17cdb51f33c3d5c9759a25e03` |
 | Solana | `GN3GD3JGqE1B1H7SrA8ncu3YQgVgT8qRVYvKzE8pscvn` |
 
 ## Quick start
