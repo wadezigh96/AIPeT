@@ -2,44 +2,47 @@
 
 ## Networks
 
-AIPeT accepts x402 payments on:
+AIPeT is configured for x402-style payments on:
 
 - **Base** & Base Sepolia (EVM)
 - **BNB Smart Chain** (Binance) & testnet
-- **Solana** mainnet + devnet (enable by setting `PAY_TO_SOLANA`)
+- **Solana** mainnet & devnet
 
-### Enabling Solana
+### Solana
 
-1. Install is already in `package.json` (`@x402/svm`)
-2. Uncomment the Solana scheme registration in `lib/x402.ts`
-3. Set a Solana address in `.env`:
-   ```
-   PAY_TO_SOLANA=YourSolanaAddressHere
-   ```
+Set the recipient in `.env`:
+
+```
+PAY_TO_SOLANA=GN3GD3JGqE1B1H7SrA8ncu3YQgVgT8qRVYvKzE8pscvn
+```
 
 ### BNB / Binance
 
-Already registered as EVM chain `eip155:56`.  
-Binance also runs its own x402 facilitator (B402) — you can point `X402_FACILITATOR_URL` to it if desired.
+Treated as EVM chain `eip155:56`. Payments use the same EVM recipient address.
 
 ### Robinhood
 
-Robinhood does not currently expose a public x402-compatible chain.  
-Users can still pay from Robinhood wallet by bridging USDC to Base / Solana / BNB.
+No native x402 chain from Robinhood yet. Users can bridge USDC to Base, Solana, or BNB and pay from a supported wallet.
+
+## Enforcing paywall
+
+```
+ENABLE_X402_PAYWALL=true
+```
+
+When enabled, `/api/chat`, `/api/donate`, and `/api/contribute` return HTTP 402 unless a valid payment header is present.
 
 ## Farcaster Mini App
 
-Files added:
+Files:
 
 - `app/.well-known/farcaster.json/route.ts` — Mini App manifest
 - `app/api/farcaster/webhook/route.ts` — event webhook
 
-### Next steps to go live on Farcaster
+### Go live
 
-1. Deploy the app (Vercel recommended)
+1. Deploy the app
 2. Set `NEXT_PUBLIC_APP_URL` to the production URL
-3. Generate account association signature via Farcaster Developers tools
-4. Add `icon.png`, `og.png`, `splash.png` to `/public`
-5. Submit / verify domain
-
-Users can then open AIPeT directly inside Warpcast / Farcaster clients and pay with their connected wallet via x402.
+3. Complete account association in the Farcaster developer tools
+4. Add `icon.png`, `og.png`, `splash.png` under `/public`
+5. Verify the domain
