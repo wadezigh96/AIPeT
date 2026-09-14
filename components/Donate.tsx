@@ -26,7 +26,7 @@ export default function Donate() {
       });
 
       if (res.status === 402) {
-        setResult("Pembayaran x402 diperlukan ($0.50 USDC). Pastikan wallet punya USDC.");
+        setResult("x402 payment required ($0.50 USDC). Make sure your wallet has USDC.");
         setStatus("error");
         return;
       }
@@ -57,13 +57,14 @@ export default function Donate() {
       </div>
 
       <p className="text-gray-600 mb-4 text-sm">
-        Setiap donasi masuk ke creator via <strong>x402</strong>. Default: <strong>$0.50 USDC</strong>.
+        Every donation goes to the creator via <strong>x402</strong>. Default:{" "}
+        <strong>$0.50 USDC</strong>.
       </p>
 
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Pesan singkat (opsional)..."
+        placeholder="Short message (optional)..."
         className="w-full rounded-xl border border-orange-200 px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
         rows={3}
       />
@@ -73,7 +74,11 @@ export default function Donate() {
         disabled={status === "loading" || !ready}
         className="w-full bg-rose-500 hover:bg-rose-600 disabled:opacity-50 text-white rounded-full py-3 font-medium transition"
       >
-        {status === "loading" ? "Processing..." : authenticated ? "Donate $0.50 USDC" : "Connect & Donate"}
+        {status === "loading"
+          ? "Processing..."
+          : authenticated
+            ? "Donate $0.50 USDC"
+            : "Connect & Donate"}
       </button>
 
       {result && (
