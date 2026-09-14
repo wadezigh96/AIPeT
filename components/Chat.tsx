@@ -9,13 +9,13 @@ type Message = {
 };
 
 export default function Chat() {
-  const { ready, authenticated, login } = usePrivy();
+  const { authenticated, login } = usePrivy();
 
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
       content:
-        "🦊 *ears soft-click* Halo! Aku **AIPeT** — robot pet rubah virtual kamu.\n\nAku siap bantu kamu untuk **segala keperluan**: tanya jawab, saran, perencanaan, curhat, ide, atau sekadar nemenin.\n\nSetiap pesan memakai micropayment x402 (USDC). Silakan bilang apa yang kamu butuhkan!",
+        "🦊 *ears soft-click* Hi! I'm **AIPeT** — your virtual fox robot pet.\n\nI'm here to help with **almost anything**: questions, advice, planning, ideas, pet tips, or just company.\n\nEach message uses x402 micropayments (USDC). Tell me what you need!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -49,14 +49,13 @@ export default function Chat() {
         }),
       });
 
-      // x402 payment required
       if (res.status === 402) {
         setMessages((prev) => [
           ...prev,
           {
             role: "assistant",
             content:
-              "🦊 Pembayaran x402 diperlukan (USDC di Base/BNB/Solana). Hubungkan wallet dengan USDC lalu coba lagi, atau gunakan client x402-compatible.",
+              "🦊 x402 payment required (USDC on Base / BNB / Solana). Connect a wallet with USDC and try again, or use an x402-compatible client.",
           },
         ]);
         return;
@@ -75,7 +74,7 @@ export default function Chat() {
         ...prev,
         {
           role: "assistant",
-          content: `🦊 *soft error beep* ${err.message || "Ada gangguan. Coba lagi ya."}`,
+          content: `🦊 *soft error beep* ${err.message || "Something went wrong. Please try again."}`,
         },
       ]);
     } finally {
@@ -91,8 +90,8 @@ export default function Chat() {
           <span className="absolute -bottom-1 -right-1 text-sm">🤖</span>
         </div>
         <div>
-          <h2 className="font-bold text-lg">AIPeT · Rubah</h2>
-          <p className="text-xs opacity-90">Robot Pet Agent • siap bantu segala keperluan</p>
+          <h2 className="font-bold text-lg">AIPeT · Fox</h2>
+          <p className="text-xs opacity-90">Robot Pet Agent • ready to help with anything</p>
         </div>
       </div>
 
@@ -105,7 +104,7 @@ export default function Chat() {
         {loading && (
           <div className="flex justify-start">
             <div className="pet-bubble assistant animate-pulse">
-              🦊 *processing...* sebentar ya
+              🦊 *processing...* one moment
             </div>
           </div>
         )}
@@ -119,9 +118,7 @@ export default function Chat() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           placeholder={
-            authenticated
-              ? "Tanya apa saja ke AIPeT..."
-              : "Login dulu untuk chat dengan robot pet"
+            authenticated ? "Ask AIPeT anything..." : "Log in to chat with your robot pet"
           }
           disabled={loading}
           className="flex-1 rounded-full border border-orange-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
@@ -131,7 +128,7 @@ export default function Chat() {
           disabled={loading || !input.trim()}
           className="bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white rounded-full px-5 py-2 font-medium transition"
         >
-          Kirim
+          Send
         </button>
       </div>
     </div>
